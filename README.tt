@@ -1,0 +1,153 @@
+h1. NMH (Nihongo Moji-code Hanbetsu) Library
+h2. 紹介
+日本語の文字コードを判別するためのライブラリです。
+現在、UTF-8, EUC-JP, ISO-2022-JP, Shift_JISに対応しています。
+
+文字コードを変換するだけであれば準標準ライブラリと言えるiconvが利用できるのですが、文字コードの判別は "nkf":http://sourceforge.jp/projects/nkf/ , "ICU":http://site.icu-project.org/ , "BABEL":http://tricklib.com/cxx/ex/babel/ といった追加ライブラリの導入が必要でした。
+
+そういった事情もあって、ヘッダファイルだけプログラムに組み込めば文字コードの判別ができるように、という思いから作ってみました。
+
+h2. 変更履歴
+* version 0.0.1
+** first release
+
+h2. インストール
+# ソースコードをダウンロード
+<pre>
+  $ git clone https://github.com/shnya/nmh.git
+or
+  $ wget http://shnya.jp/public/nmh-0.0.1.tar.gz
+  $ tar zxf nmh.tar.gz
+</pre>
+# コンパイル
+<pre>
+  $ make
+</pre>
+# インストール
+<pre>
+  $ make install
+</pre>
+
+h2. 使い方
+h3. ヘッダーファイル
+* nmh.h (C用ヘッダファイル)
+** リンク時には-lnmhオプションの追加が必要です
+* nmh.hpp (C++用ヘッダファイル, ライブラリとのリンクは必要ありません)
+
+h3. API
+* コード判別
+<pre>
+  enum NMH_CHAR_CODE nmh_code_detect(const char *str, int size);
+
+   引数:   str  判定して欲しい入力文字列
+           size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
+   戻り値: 以下のNMH_CHAR_CODEのいずれかを返す。
+           順番に(ISO-2022-JP, UTF8N, UTF8, SJIS, EUC, ASCII)となり、
+           判別不可能な場合、NMH_CHAR_CODE_UNKNOWNを返す。
+  enum NMH_CHAR_CODE {
+    NMH_CHAR_CODE_JIS = 0,
+    NMH_CHAR_CODE_UTF8N = 1,
+    NMH_CHAR_CODE_UTF8 = 2,
+    NMH_CHAR_CODE_SJIS = 3,
+    NMH_CHAR_CODE_EUC = 4,
+    NMH_CHAR_CODE_ASCII = 5,
+    NMH_CHAR_CODE_UNKNOWN = 6
+  };
+</pre>
+* JISかどうかの判別
+<pre>
+  float nmh_is_jis(const unsigned char *str, int size);
+
+   引数:   str  判定して欲しい入力文字列
+           size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
+   戻り値: 0以上であればJISの可能性が高く、0以下であればJISの可能性が低い。
+</pre>
+* utf8nかどうかの判別
+<pre>
+  float nmh_is_utf8n(const unsigned char *str, int size);
+
+   引数:   str  判定して欲しい入力文字列
+           size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
+   戻り値: 0以上であればutf8nの可能性が高く、0以下であればutf8nの可能性が低い。
+</pre>
+* utf8かどうかの判別
+<pre>
+  float nmh_is_utf8(const unsigned char *str, int size);
+
+   引数:   str  判定して欲しい入力文字列
+           size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
+   戻り値: 0以上であればutf8の可能性が高く、0以下であればutf8の可能性が低い。
+          さらに1以上であればutf8nである。
+</pre>
+* asciiかどうかの判別
+<pre>
+  float nmh_is_ascii(const unsigned char *str, int size);
+
+   引数:   str  判定して欲しい入力文字列
+           size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
+   戻り値: 0以上であればasciiの可能性が高く、0以下であればasciiの可能性が低い。
+</pre>
+* eucかどうかの判別
+<pre>
+  float nmh_is_euc(const unsigned char *str, int size);
+
+   引数:   str  判定して欲しい入力文字列
+           size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
+   戻り値: 0以上であればeucの可能性が高く、0以下であればeucの可能性が低い。
+</pre>
+* sjisかどうかの判別
+<pre>
+  float nmh_is_sjis(const unsigned char *str, int size);
+
+   引数:   str  判定して欲しい入力文字列
+           size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
+   戻り値: 0以上であればsjisの可能性が高く、0以下であればsjisの可能性が低い。
+</pre>
+
+h3. サンプルコード
+<pre class="C">
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "nmh.h"
+
+const char *codes[] = {
+    "JIS",
+    "UTF8N",
+    "UTF8",
+    "SJIS",
+    "EUC",
+    "ASCII",
+    "UNKNOWN"
+};
+
+int main(int argc, char *argv[])
+{
+  FILE *fp;
+  char buf[1024];
+  if((fp = fopen("test.txt", "r")) == NULL){
+    perror("open error");
+    exit(EXIT_FAILURE);
+  }
+  if(fgets(buf, 1024, fp) != NULL){
+    enum NMH_CHAR_CODE n = nmh_code_detect(buf, strlen(buf));
+    printf("%s\n", codes[n]);
+  }
+  fclose(fp);
+  return 0;
+}
+</pre>
+
+h2. ライセンス
+このソフトウェアはパブリックドメインで提供しています。
+自己責任でご利用ください。
+
+h2. 謝辞
+実装にあたっては、雅階凡さんの "文字コードの判定":http://www.geocities.jp/gakaibon/tips/csharp2008/charset-check.html を参考にさせて頂きました。
+また、EUCとSJISの判別については、shiroさんの "Gauche":http://practical-scheme.net/gauche/ において実装されている文字エンコーディング自動判定関数のアイディア(文字の出現頻度を考慮してスコア付けする方法)を利用させて頂きました。
+この場にて深く感謝の意を表します。
+
+ソースコード及びアルゴリズム自体は私独自で作成したものであるため、私の判断によりパブリックドメインで提供しておりますが、何か問題がありましたら、ご連絡頂けると助かります。
+
+h2. 連絡先
+testmhigashi `at` gmail.com
