@@ -1,5 +1,6 @@
 h1. NMH (Nihongo Moji-code Hanbetsu) Library
 h2. 紹介
+
 日本語の文字コードを判別するためのライブラリです。
 現在、UTF-8, EUC-JP, ISO-2022-JP, Shift_JISに対応しています。
 
