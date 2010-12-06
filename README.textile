@@ -43,7 +43,6 @@ h3. API
 * コード判別
 <pre>
   enum NMH_CHAR_CODE nmh_code_detect(const char *str, int size);
-
    引数:   str  判定して欲しい入力文字列
            size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
    戻り値: 以下のNMH_CHAR_CODEのいずれかを返す。
@@ -62,7 +61,6 @@ h3. API
 * JISかどうかの判別
 <pre>
   float nmh_is_jis(const unsigned char *str, int size);
-
    引数:   str  判定して欲しい入力文字列
            size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
    戻り値: 0以上であればJISの可能性が高く、0以下であればJISの可能性が低い。
@@ -70,7 +68,6 @@ h3. API
 * utf8nかどうかの判別
 <pre>
   float nmh_is_utf8n(const unsigned char *str, int size);
-
    引数:   str  判定して欲しい入力文字列
            size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
    戻り値: 0以上であればutf8nの可能性が高く、0以下であればutf8nの可能性が低い。
@@ -78,7 +75,6 @@ h3. API
 * utf8かどうかの判別
 <pre>
   float nmh_is_utf8(const unsigned char *str, int size);
-
    引数:   str  判定して欲しい入力文字列
            size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
    戻り値: 0以上であればutf8の可能性が高く、0以下であればutf8の可能性が低い。
@@ -87,7 +83,6 @@ h3. API
 * asciiかどうかの判別
 <pre>
   float nmh_is_ascii(const unsigned char *str, int size);
-
    引数:   str  判定して欲しい入力文字列
            size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
    戻り値: 0以上であればasciiの可能性が高く、0以下であればasciiの可能性が低い。
@@ -103,7 +98,6 @@ h3. API
 * sjisかどうかの判別
 <pre>
   float nmh_is_sjis(const unsigned char *str, int size);
-
    引数:   str  判定して欲しい入力文字列
            size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
    戻り値: 0以上であればsjisの可能性が高く、0以下であればsjisの可能性が低い。
@@ -115,7 +109,6 @@ h3. サンプルコード
 #include <stdlib.h>
 #include <string.h>
 #include "nmh.h"
-
 const char *codes[] = {
     "JIS",
     "UTF8N",
@@ -125,7 +118,6 @@ const char *codes[] = {
     "ASCII",
     "UNKNOWN"
 };
-
 int main(int argc, char *argv[])
 {
   FILE *fp;
