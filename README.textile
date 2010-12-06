@@ -104,7 +104,7 @@ h3. API
 </pre>
 
 h3. サンプルコード
-<pre class="C">
+<pre class="C"><code>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
   fclose(fp);
   return 0;
 }
-</pre>
+</code></pre>
 
 h2. ライセンス
 このソフトウェアはパブリックドメインで提供しています。
