@@ -104,7 +104,7 @@ h3. API
 </pre>
 
 h3. サンプルコード
-<pre class="C"><code>
+<pre class="c"><code>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
