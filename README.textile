@@ -17,6 +17,7 @@ h2. 変更履歴
 h2. インストール
 
 # ソースコードをダウンロード
+ "github":https://github.com/shnya/nmh もしくは "こちら":http://shnya.jp/public/nmh-0.0.1.tar.gz からダウンロードが可能です。
 <pre><code>
   $ git clone https://github.com/shnya/nmh.git
 or
