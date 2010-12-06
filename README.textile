@@ -73,35 +73,35 @@ h3. API
    戻り値: 0以上であればutf8nの可能性が高く、0以下であればutf8nの可能性が低い。
 </code></pre>
 * utf8かどうかの判別
-<pre>
+<pre><code>
   float nmh_is_utf8(const unsigned char *str, int size);
    引数:   str  判定して欲しい入力文字列
            size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
    戻り値: 0以上であればutf8の可能性が高く、0以下であればutf8の可能性が低い。
           さらに1以上であればutf8nである。
-</pre>
+</code></pre>
 * asciiかどうかの判別
-<pre>
+<pre><code>
   float nmh_is_ascii(const unsigned char *str, int size);
    引数:   str  判定して欲しい入力文字列
            size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
    戻り値: 0以上であればasciiの可能性が高く、0以下であればasciiの可能性が低い。
-</pre>
+</code></pre>
 * eucかどうかの判別
-<pre>
+<pre><code>
   float nmh_is_euc(const unsigned char *str, int size);
 
    引数:   str  判定して欲しい入力文字列
            size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
    戻り値: 0以上であればeucの可能性が高く、0以下であればeucの可能性が低い。
-</pre>
+</code></pre>
 * sjisかどうかの判別
-<pre>
+<pre><code>
   float nmh_is_sjis(const unsigned char *str, int size);
    引数:   str  判定して欲しい入力文字列
            size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
    戻り値: 0以上であればsjisの可能性が高く、0以下であればsjisの可能性が低い。
-</pre>
+</code></pre>
 
 h3. サンプルコード
 <pre><code class="c">
