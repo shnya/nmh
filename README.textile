@@ -41,7 +41,7 @@ h3. ヘッダーファイル
 
 h3. API
 * コード判別
-<pre>
+<pre><code>
   enum NMH_CHAR_CODE nmh_code_detect(const char *str, int size);
    引数:   str  判定して欲しい入力文字列
            size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
@@ -57,21 +57,21 @@ h3. API
     NMH_CHAR_CODE_ASCII = 5,
     NMH_CHAR_CODE_UNKNOWN = 6
   };
-</pre>
+</code></pre>
 * JISかどうかの判別
-<pre>
+<pre><code>
   float nmh_is_jis(const unsigned char *str, int size);
    引数:   str  判定して欲しい入力文字列
            size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
    戻り値: 0以上であればJISの可能性が高く、0以下であればJISの可能性が低い。
-</pre>
+</code></pre>
 * utf8nかどうかの判別
-<pre>
+<pre><code>
   float nmh_is_utf8n(const unsigned char *str, int size);
    引数:   str  判定して欲しい入力文字列
            size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
    戻り値: 0以上であればutf8nの可能性が高く、0以下であればutf8nの可能性が低い。
-</pre>
+</code></pre>
 * utf8かどうかの判別
 <pre>
   float nmh_is_utf8(const unsigned char *str, int size);
