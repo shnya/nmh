@@ -4,6 +4,7 @@ h2. 紹介
 
 日本語の文字コードを判別するためのライブラリです。
 現在、UTF-8, EUC-JP, ISO-2022-JP, Shift_JISに対応しています。
+また、BOMありのUTF-16, UTF-32も判別可能です。
 
 文字コードを変換するだけであれば準標準ライブラリと言えるiconvが利用できるのですが、文字コードの判別は "nkf":http://sourceforge.jp/projects/nkf/ , "ICU":http://site.icu-project.org/ , "BABEL":http://tricklib.com/cxx/ex/babel/ といった追加ライブラリの導入が必要でした。
 
@@ -11,6 +12,8 @@ h2. 紹介
 
 h2. 変更履歴
 
+* version 0.0.2
+** add UTF-16 and UTF-32 identification
 * version 0.0.1
 ** first release
 
@@ -49,14 +52,19 @@ h3. API
    戻り値: 以下のNMH_CHAR_CODEのいずれかを返す。
            順番に(ISO-2022-JP, UTF8N, UTF8, SJIS, EUC, ASCII)となり、
            判別不可能な場合、NMH_CHAR_CODE_UNKNOWNを返す。
+
   enum NMH_CHAR_CODE {
     NMH_CHAR_CODE_JIS = 0,
-    NMH_CHAR_CODE_UTF8N = 1,
-    NMH_CHAR_CODE_UTF8 = 2,
-    NMH_CHAR_CODE_SJIS = 3,
-    NMH_CHAR_CODE_EUC = 4,
-    NMH_CHAR_CODE_ASCII = 5,
-    NMH_CHAR_CODE_UNKNOWN = 6
+    NMH_CHAR_CODE_UTF8 = 1,
+    NMH_CHAR_CODE_UTF8N = 2,
+    NMH_CHAR_CODE_UTF16BE = 3,
+    NMH_CHAR_CODE_UTF16LE = 4,
+    NMH_CHAR_CODE_UTF32BE = 5,
+    NMH_CHAR_CODE_UTF32LE = 6,
+    NMH_CHAR_CODE_SJIS = 7,
+    NMH_CHAR_CODE_EUC = 8,
+    NMH_CHAR_CODE_ASCII = 9,
+    NMH_CHAR_CODE_UNKNOWN = 10
   };
 </code></pre>
 * JISかどうかの判別
@@ -80,6 +88,22 @@ h3. API
            size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
    戻り値: 0以上であればutf8の可能性が高く、0以下であればutf8の可能性が低い。
           さらに1以上であればutf8nである。
+</code></pre>
+* utf16かどうかの判別
+<pre><code>
+  float nmh_is_utf16(const unsigned char *str, int size);
+   引数:   str  判定して欲しい入力文字列
+           size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
+   戻り値: 0以上であればutf16の可能性が高く、0以下であればutf16の可能性が低い。
+          さらに1以上であればutf16beである。
+</code></pre>
+* utf32かどうかの判別
+<pre><code>
+  float nmh_is_utf32(const unsigned char *str, int size);
+   引数:   str  判定して欲しい入力文字列
+           size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
+   戻り値: 0以上であればutf32の可能性が高く、0以下であればutf32の可能性が低い。
+          さらに1以上であればutf32beである。
 </code></pre>
 * asciiかどうかの判別
 <pre><code>
@@ -114,6 +138,10 @@ const char *codes[] = {
     "JIS",
     "UTF8N",
     "UTF8",
+    "UTF16BE",
+    "UTF16LE",
+    "UTF32BE",
+    "UTF32LE",
     "SJIS",
     "EUC",
     "ASCII",

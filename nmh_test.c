@@ -25,6 +25,8 @@
 #include "nmh.h"
 
 int convert(const char *to_code, const char *input, char **output);
+void test_detect_utf16(void);
+void test_detect_utf32(void);
 void test_detect_jis(void);
 void test_detect_utf8n(void);
 void test_detect_utf8(void);
@@ -50,7 +52,7 @@ int convert(const char *to_code, const char *input, char **output){
 
   iptr = inbuf = strdup(input);
   inlen = strlen(inbuf);
-  avail = inlen * 3 + 1;
+  avail = inlen * 4 + 1;
   wptr = outbuf = (char *)malloc(avail * sizeof(char));
 
   nconv = iconv(cd, &iptr, &inlen, &wptr, &avail);
@@ -83,6 +85,40 @@ int convert(const char *to_code, const char *input, char **output){
   return 1;
 }
 
+void test_detect_utf16(void){
+  char *output;
+  enum NMH_CHAR_CODE code;
+  int result;
+  float score;
+
+  result = convert("UTF-16", test_str, &output);
+  CU_ASSERT_EQUAL(result,1);
+
+  score = nmh_is_utf16((unsigned char *)output, strlen(output));
+  CU_ASSERT_DOUBLE_EQUAL(0.5, score, 0.1);
+
+  code = nmh_code_detect(output, strlen(output));
+  CU_ASSERT_EQUAL(code,NMH_CHAR_CODE_UTF16LE);
+  free(output);
+
+}
+
+void test_detect_utf32(void){
+  char *output;
+  enum NMH_CHAR_CODE code;
+  int result;
+  float score;
+
+  result = convert("UTF-32", test_str, &output);
+  CU_ASSERT_EQUAL(result,1);
+
+  score = nmh_is_utf32((unsigned char *)output, 8);
+  CU_ASSERT_DOUBLE_EQUAL(0.5, score, 0.1);
+
+  code = nmh_code_detect(output, 8);
+  CU_ASSERT_EQUAL(code,NMH_CHAR_CODE_UTF32LE);
+  free(output);
+}
 
 void test_detect_jis(void){
   char *output = NULL;
@@ -90,41 +126,42 @@ void test_detect_jis(void){
   int result = convert("ISO-2022-JP", test_str, &output);
   float score;
 
+  CU_ASSERT_EQUAL(result,1);
+
   score = nmh_is_jis((unsigned char *)output, strlen(output));
   CU_ASSERT_DOUBLE_EQUAL(1.0, score, 0.1);
 
-  CU_ASSERT_EQUAL(result,1);
   code = nmh_code_detect(output, strlen(output));
   CU_ASSERT_EQUAL(code,NMH_CHAR_CODE_JIS);
 
   free(output);
 }
 
-
 void test_detect_utf8n(void){
   char *output, *output2;
   enum NMH_CHAR_CODE code;
   float score;
-  int result = convert("UTF-8", test_str, &output);
-
+  int result = convert("UTF-8", test_str, &output2);
   CU_ASSERT_EQUAL(result,1);
-  output2 = (char *)malloc(sizeof(char) * strlen(output) + 4);
-  free(output);
-  strncpy(output2 + 3, output, strlen(output) + 1);
-  output2[0] = 0xEF;
-  output2[1] = 0xBB;
-  output2[2] = 0xBF;
 
-  score = nmh_is_utf8n((unsigned char *)output2, strlen(output2));
+  output = (char *)malloc(sizeof(char) * strlen(output2) + 4);
+  strncpy(output + 3, test_str, strlen(output2) + 1);
+  free(output2);
+  output[0] = 0xEF;
+  output[1] = 0xBB;
+  output[2] = 0xBF;
+
+  score = nmh_is_utf8n((unsigned char *)output, strlen(output));
   CU_ASSERT_DOUBLE_EQUAL(1.0, score, 0.1);
-  score = nmh_is_utf8((unsigned char *)output2, strlen(output2));
+  score = nmh_is_utf8((unsigned char *)output, strlen(output));
   CU_ASSERT_DOUBLE_EQUAL(1.5, score, 0.1);
 
-  code = nmh_code_detect(output2, strlen(output2));
+  code = nmh_code_detect(output, strlen(output));
   CU_ASSERT_EQUAL(code,NMH_CHAR_CODE_UTF8N);
 
-  free(output2);
+  free(output);
 }
+
 
 void test_detect_utf8(void){
   char *output;
@@ -132,10 +169,11 @@ void test_detect_utf8(void){
   int result = convert("UTF-8", test_str, &output);
   float score;
 
+  CU_ASSERT_EQUAL(result,1);
+
   score = nmh_is_utf8((unsigned char *)output, strlen(output));
   CU_ASSERT_DOUBLE_EQUAL(0.5, score, 0.1);
 
-  CU_ASSERT_EQUAL(result,1);
   code = nmh_code_detect(output, strlen(output));
   CU_ASSERT_EQUAL(code,NMH_CHAR_CODE_UTF8);
 
@@ -148,10 +186,11 @@ void test_detect_sjis(void){
   int result = convert("SJIS", test_str, &output);
   float score;
 
+  CU_ASSERT_EQUAL(result,1);
+
   score = nmh_is_sjis((unsigned char *)output, strlen(output));
   CU_ASSERT_DOUBLE_EQUAL(1.0, score, 0.1);
 
-  CU_ASSERT_EQUAL(result,1);
   code = nmh_code_detect(output, strlen(output));
   CU_ASSERT_EQUAL(code,NMH_CHAR_CODE_SJIS);
 
@@ -164,10 +203,11 @@ void test_detect_euc(void){
   int result = convert("EUC-JP", test_str, &output);
   float score;
 
+  CU_ASSERT_EQUAL(result,1);
+
   score = nmh_is_euc((unsigned char *)output, strlen(output));
   CU_ASSERT_DOUBLE_EQUAL(1.0, score, 0.1);
 
-  CU_ASSERT_EQUAL(result,1);
   code = nmh_code_detect(output, strlen(output));
   CU_ASSERT_EQUAL(code,NMH_CHAR_CODE_EUC);
 
@@ -202,6 +242,8 @@ int main(){
   }
 
   if ((NULL == CU_add_test(pSuite, "Test_jis", test_detect_jis)) ||
+      (NULL == CU_add_test(pSuite, "Test_utf16", test_detect_utf16)) ||
+      (NULL == CU_add_test(pSuite, "Test_utf32", test_detect_utf32)) ||
       (NULL == CU_add_test(pSuite, "Test_utf8n", test_detect_utf8n)) ||
       (NULL == CU_add_test(pSuite, "Test_utf8", test_detect_utf8)) ||
       (NULL == CU_add_test(pSuite, "Test_sjis", test_detect_sjis)) ||

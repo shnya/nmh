@@ -15,6 +15,35 @@
 
 #include "nmh.h"
 
+
+float nmh_is_utf16(const unsigned char *str, int size){
+  if(size < 2) return -1.0;
+  if(str[0] == 0xFE && str[1] == 0xFF){
+    // str is UTF-16BE
+    return 1.5;
+  }else if(str[0] == 0xFF && str[1] == 0xFE){
+    // str is UTF-16LE
+    return 0.5;
+  }
+  return -1.0;
+}
+
+
+float nmh_is_utf32(const unsigned char *str, int size){
+  if(size < 4) return -1.0;
+  if(str[0] == 0x00 && str[1] == 0x00 &&
+     str[3] == 0xFE && str[4] == 0xFF){
+    // str is UTF-32BE
+    return 1.5;
+  }else if(str[0] == 0xFF && str[1] == 0xFE &&
+           str[2] == 0x00 && str[3] == 0x00){
+    // str is UTF-32LE
+    return 0.5;
+  }
+  return -1.0;
+}
+
+
 float nmh_is_jis(const unsigned char *str, int size){
   int i;
   const unsigned char *p = str;
@@ -163,8 +192,21 @@ float nmh_is_sjis(const unsigned char *str, int size){
 
 enum NMH_CHAR_CODE
 nmh_code_detect(const char *_str, int size){
-  float isutf8, issjis, iseuc;
+  float isutf8, issjis, iseuc, isutf16, isutf32;
   const unsigned char *str = (const unsigned char*)_str;
+
+  if((isutf32 = nmh_is_utf32(str,size)) > 0.0){
+    if(isutf32 > 1.0)
+      return NMH_CHAR_CODE_UTF32BE;
+    else
+      return NMH_CHAR_CODE_UTF32LE;
+  }
+  if((isutf16 = nmh_is_utf16(str,size)) > 0.0){
+    if(isutf16 > 1.0)
+      return NMH_CHAR_CODE_UTF16BE;
+    else
+      return NMH_CHAR_CODE_UTF16LE;
+  }
 
   if(nmh_is_jis(str,size) > 0.0) return NMH_CHAR_CODE_JIS;
   if(nmh_is_ascii(str,size) > 0.0) return NMH_CHAR_CODE_ASCII;

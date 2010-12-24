@@ -22,14 +22,20 @@ extern "C" {
 
   enum NMH_CHAR_CODE {
     NMH_CHAR_CODE_JIS = 0,
-    NMH_CHAR_CODE_UTF8N = 1,
-    NMH_CHAR_CODE_UTF8 = 2,
-    NMH_CHAR_CODE_SJIS = 3,
-    NMH_CHAR_CODE_EUC = 4,
-    NMH_CHAR_CODE_ASCII = 5,
-    NMH_CHAR_CODE_UNKNOWN = 6
+    NMH_CHAR_CODE_UTF8 = 1,
+    NMH_CHAR_CODE_UTF8N = 2,
+    NMH_CHAR_CODE_UTF16BE = 3,
+    NMH_CHAR_CODE_UTF16LE = 4,
+    NMH_CHAR_CODE_UTF32BE = 5,
+    NMH_CHAR_CODE_UTF32LE = 6,
+    NMH_CHAR_CODE_SJIS = 7,
+    NMH_CHAR_CODE_EUC = 8,
+    NMH_CHAR_CODE_ASCII = 9,
+    NMH_CHAR_CODE_UNKNOWN = 10
   };
 
+  float nmh_is_utf16(const unsigned char *str, int size);
+  float nmh_is_utf32(const unsigned char *str, int size);
   float nmh_is_jis(const unsigned char *str, int size);
   float nmh_is_utf8n(const unsigned char *str, int size);
   float nmh_is_utf8(const unsigned char *str, int size);
