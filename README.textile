@@ -52,7 +52,6 @@ h3. API
    戻り値: 以下のNMH_CHAR_CODEのいずれかを返す。
            順番に(ISO-2022-JP, UTF8N, UTF8, SJIS, EUC, ASCII)となり、
            判別不可能な場合、NMH_CHAR_CODE_UNKNOWNを返す。
-
   enum NMH_CHAR_CODE {
     NMH_CHAR_CODE_JIS = 0,
     NMH_CHAR_CODE_UTF8 = 1,
