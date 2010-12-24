@@ -50,7 +50,8 @@ h3. API
    引数:   str  判定して欲しい入力文字列
            size ヌル文字を除いた入力文字列の文字数(strlen(str)と同じ)
    戻り値: 以下のNMH_CHAR_CODEのいずれかを返す。
-           順番に(ISO-2022-JP, UTF8N, UTF8, SJIS, EUC, ASCII)となり、
+           順番に(ISO-2022-JP, UTF8, UTF8N, UTF16BE, UTF16LE,
+           UTF32BE, UTF32LE, SJIS, EUC, ASCII)となり、
            判別不可能な場合、NMH_CHAR_CODE_UNKNOWNを返す。
   enum NMH_CHAR_CODE {
     NMH_CHAR_CODE_JIS = 0,
