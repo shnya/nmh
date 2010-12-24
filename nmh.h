@@ -34,11 +34,11 @@ extern "C" {
     NMH_CHAR_CODE_UNKNOWN = 10
   };
 
+  float nmh_is_jis(const unsigned char *str, int size);
+  float nmh_is_utf8(const unsigned char *str, int size);
+  float nmh_is_utf8n(const unsigned char *str, int size);
   float nmh_is_utf16(const unsigned char *str, int size);
   float nmh_is_utf32(const unsigned char *str, int size);
-  float nmh_is_jis(const unsigned char *str, int size);
-  float nmh_is_utf8n(const unsigned char *str, int size);
-  float nmh_is_utf8(const unsigned char *str, int size);
   float nmh_is_ascii(const unsigned char *str, int size);
   float nmh_is_euc(const unsigned char *str, int size);
   float nmh_is_sjis(const unsigned char *str, int size);

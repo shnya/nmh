@@ -28,7 +28,6 @@ float nmh_is_utf16(const unsigned char *str, int size){
   return -1.0;
 }
 
-
 float nmh_is_utf32(const unsigned char *str, int size){
   if(size < 4) return -1.0;
   if(str[0] == 0x00 && str[1] == 0x00 &&
@@ -42,7 +41,6 @@ float nmh_is_utf32(const unsigned char *str, int size){
   }
   return -1.0;
 }
-
 
 float nmh_is_jis(const unsigned char *str, int size){
   int i;

@@ -142,6 +142,7 @@ void test_detect_utf8n(void){
   enum NMH_CHAR_CODE code;
   float score;
   int result = convert("UTF-8", test_str, &output2);
+
   CU_ASSERT_EQUAL(result,1);
 
   output = (char *)malloc(sizeof(char) * strlen(output2) + 4);
