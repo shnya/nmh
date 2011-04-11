@@ -224,36 +224,3 @@ nmh_code_detect(const char *_str, int size){
   return NMH_CHAR_CODE_UNKNOWN;
 }
 
-/* Usage Example
-
-   #include <stdio.h>
-   #include <stdlib.h>
-   #include <string.h>
-
-   const char *codes[] = {
-   "JIS",
-   "UTF8N",
-   "UTF8",
-   "SJIS",
-   "EUC",
-   "ASCII",
-   "UNKNOWN"
-   };
-
-   int main(int argc, char *argv[])
-   {
-   FILE *fp;
-   char buf[1024];
-   if((fp = fopen("test.txt", "r")) == NULL){
-   perror("open error");
-   exit(EXIT_FAILURE);
-   }
-   if(fgets(buf, 1024, fp) != NULL){
-   enum NMH_CHAR_CODE n = nmh_code_detect(buf, strlen(buf));
-   printf("%s\n", codes[n]);
-   }
-   fclose(fp);
-   return 0;
-   }
-
-*/
