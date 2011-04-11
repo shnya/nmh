@@ -12,6 +12,8 @@ h2. 紹介
 
 h2. 変更履歴
 
+* version 0.0.3
+** delete unuseful comment
 * version 0.0.2
 ** add UTF-16 and UTF-32 identification
 * version 0.0.1
